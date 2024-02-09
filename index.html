@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JSON Fixer</title>
+  </head>
+  <body>
+    <p>It's a just dummy website to make easier my work</p>
+    <input type="text" id="inputText" />
+    <div id="buttonContainer">
+      <button onclick="parseAndRoute1()">Position Fix</button>
+      <button onclick="parseAndRoute2()">Color Fix</button>
+      <button onclick="copyResult()">Copy Result</button>
+    </div>
+    <div id="resultDiv"></div>
+    <script>
+      function parseAndRoute1() {
+        var inputValue = document.getElementById("inputText").value;
+
+        var result = fixDuplicatePositions(JSON.parse(inputValue));
+
+        document.getElementById("resultDiv").innerText = result;
+      }
+
+      function fixDuplicatePositions(json_s) {
+        var json = json_s;
+        if (Object.keys(json).length < 2) json = json_s[0];
+
+        let propPosition = json.props?.position;
+        let stylePosition = json.props?.style.position;
+
+        if (propPosition) {
+          stylePosition = propPosition;
+          delete json.props.position;
+        }
+        if (stylePosition) json.props.style["position"] = stylePosition;
+
+        if (json.children)
+          json.children.forEach((child) => fixDuplicatePositions(child));
+
+        return JSON.stringify(json);
+      }
+
+      function copyResult() {
+        var resultDiv = document.getElementById("resultDiv");
+        var range = document.createRange();
+        range.selectNode(resultDiv);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+        document.getElementById("resultDiv").innerText = "Copied!";
+      }
+
+      function parseAndRoute2() {
+        var inputValue = document.getElementById("inputText").value;
+
+        var result = fixUndefinedColor(JSON.parse(inputValue));
+
+        document.getElementById("resultDiv").innerText = result;
+      }
+
+      function fixUndefinedColor(json_s) {
+        var json = json_s;
+        if (json.props?.style?.color === "#undefined") {
+          json.props.style.color = "#000";
+        }
+        if (json.children) {
+          json.children.forEach((child) => fixUndefinedColor(child));
+        }
+        return JSON.stringify(json);
+      }
+    </script>
+  </body>
+  <style>
+    body {
+      background-color: gray;
+    }
+    p {
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 5vh;
+      }
+    #inputText {
+      display: block;
+      margin: 0 auto;
+      font-size: 20px;
+      width: 300px;
+      height: 40px;
+    }
+
+    #buttonContainer {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: brown;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: darkred;
+    }
+
+    button:active {
+      background-color: saddlebrown;
+    }
+  </style>
+</html>
