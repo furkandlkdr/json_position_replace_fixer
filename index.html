@@ -7,16 +7,16 @@
     <p>It's a just dummy website to make easier my work</p>
     <input type="text" id="inputText" />
     <div id="buttonContainer">
-      <button onclick="parseAndRoute1()">Position Fix</button>
-      <button onclick="parseAndRoute2()">Color Fix</button>
+      <button onclick="parseAndRoute(1)">Position Fix</button>
+      <button onclick="parseAndRoute(2)">Color Fix</button>
       <button onclick="copyResult()">Copy Result</button>
     </div>
-    <div id="resultDiv"></div>
+    <div id="resultDiv" style="text-align: center;"></div>
     <script>
-      function parseAndRoute1() {
+      function parseAndRoute(choose) {
         var inputValue = document.getElementById("inputText").value;
 
-        var result = fixDuplicatePositions(JSON.parse(inputValue));
+        var result = choose == 1 ? fixDuplicatePositions(JSON.parse(inputValue)) : fixUndefinedColor(JSON.parse(inputValue));
 
         document.getElementById("resultDiv").innerText = result;
       }
@@ -48,15 +48,8 @@
         window.getSelection().addRange(range);
         document.execCommand("copy");
         window.getSelection().removeAllRanges();
+        inputText.value = resultDiv.innerText;
         document.getElementById("resultDiv").innerText = "Copied!";
-      }
-
-      function parseAndRoute2() {
-        var inputValue = document.getElementById("inputText").value;
-
-        var result = fixUndefinedColor(JSON.parse(inputValue));
-
-        document.getElementById("resultDiv").innerText = result;
       }
 
       function fixUndefinedColor(json_s) {
