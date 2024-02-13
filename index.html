@@ -15,51 +15,58 @@
     <script>
       function parseAndRoute(choose) {
         var inputValue = document.getElementById("inputText").value;
-
+//Get Input's value and redirect for function's choose.
         var result = choose == 1 ? fixDuplicatePositions(JSON.parse(inputValue)) : fixUndefinedColor(JSON.parse(inputValue));
-
+//Change resultdiv's innertext to result
         document.getElementById("resultDiv").innerText = result;
       }
 
       function fixDuplicatePositions(json_s) {
         var json = json_s;
         if (Object.keys(json).length < 2) json = json_s[0];
-
+//Get json and if it's array and has 1 element inside, make json to json_s
         let propPosition = json.props?.position;
         let stylePosition = json.props?.style.position;
-
+//Hold positions inside json
         if (propPosition) {
           stylePosition = propPosition;
           delete json.props.position;
-        }
+        } // if has position in prop, proppos takes precedence over stylepos
+        // So give stylepos proppos
         if (stylePosition) json.props.style["position"] = stylePosition;
-
+// if has stylepos after this equality, change the prop's stylepos
+// you can add: else { stylepos = relative; }
         if (json.children)
           json.children.forEach((child) => fixDuplicatePositions(child));
-
+//if has children, reqursive this function
         return JSON.stringify(json);
+// and return the result.
       }
 
       function copyResult() {
         var resultDiv = document.getElementById("resultDiv");
+//hold result div and copy user's window
         var range = document.createRange();
         range.selectNode(resultDiv);
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
         document.execCommand("copy");
         window.getSelection().removeAllRanges();
+// and if you press copy, change inputtext to result for next step
+// And notify user by changing resultdiv to Copied.
         inputText.value = resultDiv.innerText;
         document.getElementById("resultDiv").innerText = "Copied!";
+        // TODO: Change "Copied!" to JSON's first element's name.
       }
 
       function fixUndefinedColor(json_s) {
         var json = json_s;
-        if (json.props?.style?.color === "#undefined") {
+        if (json.props?.style?.color === "#undefined")
           json.props.style.color = "#000";
-        }
-        if (json.children) {
+// If has style.color and equal to undefined, change to black
+        if (json.children)
           json.children.forEach((child) => fixUndefinedColor(child));
-        }
+// If has children recursive this functipn
         return JSON.stringify(json);
       }
     </script>
