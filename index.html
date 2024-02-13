@@ -55,7 +55,7 @@
 // and if you press copy, change inputtext to result for next step
 // And notify user by changing resultdiv to Copied.
         inputText.value = resultDiv.innerText;
-        document.getElementById("resultDiv").innerText = "Copied!";
+        document.getElementById("resultDiv").innerText = JSON.parse(resultDiv.innerText)?.uuid + " Copied!";
         // TODO: Change "Copied!" to JSON's first element's name.
       }
 
