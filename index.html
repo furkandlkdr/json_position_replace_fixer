@@ -26,10 +26,6 @@
 
       function fixDuplicatePositions(json_s) {
         var json = json_s;
-        if (!json_s || typeof json_s !== "object" || json_s.length === 0){
-          document.getElementById("resultDiv").innerText = "Invalid JSON";          
-          return;
-        }
         if (Object.keys(json).length < 2) json = json_s[0];
         //Get json and if it's array and has 1 element inside, make json to json_s
         let propPosition = json.props?.position;
@@ -52,10 +48,6 @@
 
       function fixUndefinedColor(json_s) {
         var json = json_s;
-        if (!json_s || typeof json_s !== "object" || json_s.length === 0){
-          document.getElementById("resultDiv").innerText = "Invalid JSON";
-          return;
-        }
         if (Object.keys(json).length < 2) json = json_s[0];
         if (json.props?.style?.color === "#undefined")
           json.props.style.color = "#000";
@@ -68,7 +60,6 @@
 
       function copyResult() {
         var resultDiv = document.getElementById("resultDiv");
-        if (resultDiv.innerText === "") return;
         //hold result div and copy for user
         if (!resultDiv.innerText.startsWith("[")) {
           resultDiv.innerText = "[" + resultDiv.innerText + "]";
