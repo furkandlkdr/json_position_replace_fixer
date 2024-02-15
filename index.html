@@ -39,8 +39,19 @@
         if (json.children)
           json.children.forEach((child) => fixDuplicatePositions(child));
 //if has children, reqursive this function
-        return JSON.stringify(json);
+        return "[" + JSON.stringify(json) + "]";
 // and return the result.
+      }
+      
+      function fixUndefinedColor(json_s) {
+        var json = json_s;
+        if (json.props?.style?.color === "#undefined")
+          json.props.style.color = "#000";
+// If has style.color and equal to undefined, change to black
+        if (json.children)
+          json.children.forEach((child) => fixUndefinedColor(child));
+// If has children recursive this functipn
+        return "[" + JSON.stringify(json) + "]";
       }
 
       function copyResult() {
@@ -57,17 +68,6 @@
         inputText.value = resultDiv.innerText;
         document.getElementById("resultDiv").innerText = JSON.parse(resultDiv.innerText)?.uuid + " Copied!";
         // TODO: Change "Copied!" to JSON's first element's name.
-      }
-
-      function fixUndefinedColor(json_s) {
-        var json = json_s;
-        if (json.props?.style?.color === "#undefined")
-          json.props.style.color = "#000";
-// If has style.color and equal to undefined, change to black
-        if (json.children)
-          json.children.forEach((child) => fixUndefinedColor(child));
-// If has children recursive this functipn
-        return JSON.stringify(json);
       }
     </script>
   </body>
